@@ -35,7 +35,13 @@ module.exports = {
     overlay: {
       warnings: false,
       errors: true
-    },
+    }, /*,
+    proxy: {
+      [process.env.VUE_APP_BASE_API]: {
+        target: 'http://localhost:8080',
+        changeOrigin: true
+      }
+    }*/
     before: require('./mock/mock-server.js')
   },
   configureWebpack: {
