@@ -2,15 +2,15 @@ import request from '@/utils/request'
 
 export function fetchList(query) {
   return request({
-    url: 'http://localhost:8080/book/list',
+    url: 'http://localhost:8080/user/list',
     method: 'get',
     params: query
   })
 }
 
-export function fetchBook(id) {
+export function fetchArticle(id) {
   return request({
-    url: '/article/detail',
+    url: '/vue-element-admin/article/detail',
     method: 'get',
     params: { id }
   })
@@ -24,17 +24,17 @@ export function fetchPv(pv) {
   })
 }
 
-export function createBook(data) {
+export function createArticle(data) {
   return request({
-    url: '/vue-element-admin/book/create',
+    url: '/vue-element-admin/article/create',
     method: 'post',
     data
   })
 }
 
-export function updateBook(data) {
+export function updateArticle(data) {
   return request({
-    url: '/vue-element-admin/book/update',
+    url: '/vue-element-admin/article/update',
     method: 'post',
     data
   })
