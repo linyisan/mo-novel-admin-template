@@ -26,7 +26,7 @@ export function logout() {
 
 export function fetchList(query) {
   return request({
-    url: 'http://localhost:8080/user/list',
+    url: '/vue-admin-template/user/list',
     method: 'get',
     params: query
   })
@@ -34,7 +34,7 @@ export function fetchList(query) {
 
 export function fetchUser(id) {
   return request({
-    url: 'http://localhost:8080/user/detail',
+    url: 'http://localhost:8089/user/detail',
     method: 'get',
     params: { id }
   })
@@ -42,7 +42,7 @@ export function fetchUser(id) {
 
 export function fetchPv(pv) {
   return request({
-    url: 'http://localhost:8080/user/pv',
+    url: 'http://localhost:8089/user/pv',
     method: 'get',
     params: { pv }
   })
@@ -50,7 +50,7 @@ export function fetchPv(pv) {
 
 export function createUser(data) {
   return request({
-    url: 'http://localhost:8080/user/create',
+    url: 'http://localhost:8089/user/create',
     method: 'post',
     data
   })
@@ -58,7 +58,7 @@ export function createUser(data) {
 
 export function updateUser(data) {
   return request({
-    url: 'http://localhost:8080/user/update',
+    url: 'http://localhost:8089/user/update',
     method: 'post',
     data
   })

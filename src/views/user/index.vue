@@ -1,28 +1,44 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-input
-        v-model="listQuery.title"
-        placeholder="Title"
-        style="width: 200px;"
-        class="filter-item"
-        @keyup.enter.native="handleFilter"
-      />
-      <el-select v-model="listQuery.importance" placeholder="Imp" clearable style="width: 90px" class="filter-item">
-        <el-option v-for="item in importanceOptions" :key="item" :label="item" :value="item" />
-      </el-select>
-      <el-select v-model="listQuery.type" placeholder="Type" clearable style="width: 130px" class="filter-item">
-        <el-option
-          v-for="item in calendarTypeOptions"
-          :key="item.key"
-          :label="item.display_name+'('+item.key+')'"
-          :value="item.key"
-        />
-      </el-select>
-      <el-select v-model="listQuery.sort" clearable style="width: 140px" class="filter-item" @change="handleFilter">
-        <el-option v-for="item in sortOptions" :key="item.key" :label="item.label" :value="item.key" />
-      </el-select>
-      <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">搜索</el-button>
+      <el-form ref="filterForm" :model="listQuery" inline>
+        <el-form-item prop="username"><el-input
+          v-model="listQuery.username"
+          placeholder="请输入用户名搜索"
+          clearable
+          style="width: 160px;"
+          class="filter-item"
+          @keyup.enter.native="handleFilter"
+        /></el-form-item>
+        <el-form-item prop="mobile"><el-input
+          v-model="listQuery.mobile"
+          placeholder="请输入手机号搜索"
+          clearable
+          style="width: 160px;"
+          class="filter-item"
+          @keyup.enter.native="handleFilter"
+        /></el-form-item>
+        <el-form-item prop="email"><el-input
+          v-model="listQuery.email"
+          placeholder="请输入邮件搜索"
+          clearable
+          style="width: 160px;"
+          class="filter-item"
+          @keyup.enter.native="handleFilter"
+        /></el-form-item>
+        <el-form-item prop="sex"><el-select v-model="listQuery.sex" placeholder="性别" clearable style="width: 80px" class="filter-item" @change="handleFilter">
+          <el-option v-for="item in dicts.sexMap" :key="item.value" :label="item.label" :value="item.value" />
+        </el-select></el-form-item>
+        <el-form-item prop="roleId">        <el-select v-model="listQuery.roleId" placeholder="角色" clearable style="width: 80px" class="filter-item" @change="handleFilter">
+          <el-option v-for="item in dicts.roleDict" :key="item.value" :label="item.label" :value="item.value" />
+        </el-select></el-form-item>
+        <el-form-item prop="sort"><el-select v-model="listQuery.sort" placeholder="排序" clearable style="width: 100px" class="filter-item" @change="handleFilter">
+          <!--        <el-option v-for="item in sortOptions" :key="item.key" :label="item.label" :value="item.key" />-->
+          <el-option label="更新时间" value="updateTime" />
+        </el-select></el-form-item>
+        <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">搜索</el-button>
+        <el-button v-waves class="filter-item" type="primary" icon="el-icon-refresh-left" @click="handleReset('filterForm')">重置</el-button>
+      </el-form>
       <el-button
         v-waves
         class="filter-item"
@@ -49,49 +65,66 @@
         prop="id"
         sortable="custom"
         align="center"
-        width="80"
+        width="70px"
         :class-name="getSortClass('id')"
       >
         <template slot-scope="{row}">
           <span>{{ row.id }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="时间" align="center" width="170px">
+      <el-table-column label="修改时间" align="center" sortable prop="updateTime">
         <template slot-scope="{row}">
           <span>{{ row.updateTime }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="用户名" align="center" width="150px">
+      <el-table-column label="用户名" align="center" fixed>
         <template slot-scope="{row}">
           <span>{{ row.username }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="密码" align="center" width="150px">
+      <el-table-column label="密码" align="center">
         <template slot-scope="{row}">
           <span>{{ row.password }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="邮件" align="center" width="150px">
+      <el-table-column
+        label="性别"
+        align="center"
+        width="70px"
+        :filters="[{text:'男', value:0},{text: '女', value: 1}]"
+        :filter-method="(value, row) => {return row.sex === value}"
+      >
         <template slot-scope="{row}">
-          <span>{{ row.emial }}</span>
+          <span>{{ row.sex | getDictLabel(dicts.sexMap) }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="头像" align="center" width="150px">
+      <el-table-column label="邮件" align="center">
+        <template slot-scope="{row}">
+          <span>{{ row.email }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="头像" align="center">
         <template slot-scope="{row}">
           <span>{{ row.avatar }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="手机" align="center" width="150px">
+      <el-table-column label="手机" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.phone }}</span>
+          <span>{{ row.mobile }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="状态" align="center" width="150px">
+      <el-table-column
+        label="状态"
+        align="center"
+        width="70px"
+        :filters="[{text: '可用', value: 1}, {text: '禁用', value: 0}]"
+        :filter-method="(value, row)=>{return row.status === value}"
+      >
         <template slot-scope="{row}">
-          <span>{{ row.status }}</span>
+          <el-tag>{{ row.status | getDictLabel(dicts.status) }}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" width="160" class-name="small-padding fixed-with">
+      <el-table-column label="操作" align="center" width="160" class-name="small-padding fixed-with" fixed="right">
         <template slot-scope="{row, $index}">
           <el-button type="primary" size="mini" @click="handleUpdate(row)">修改</el-button>
           <el-button v-if="row.status != 'deleted'" size="mini" type="danger" @click="handleDelete(row, $index)">删除
@@ -105,10 +138,12 @@
       :total="total"
       :page.sync="listQuery.page"
       :limit.sync="listQuery.limit"
-      @pagination="getList"
+      @pagination="getDataList"
     />
 
-    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
+    <data-form-dlg :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" :model="temp" />
+
+    <!--<el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form
         ref="dataForm"
         :rules="rules"
@@ -163,15 +198,17 @@
           确定
         </el-button>
       </div>
-    </el-dialog>
+    </el-dialog>-->
   </div>
 </template>
 
 <script>
 import { createArticle, updateArticle } from '@/api/article'
+import { dicts, getDictLabel } from '@/dicts'
 import { fetchList } from '@/api/user'
 import waves from '@/directive/waves' // waves directive
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
+import DataFormDlg from './DataFormDlg'
 
 const calendarTypeOptions = [
   { key: 'CN', display_name: 'China' },
@@ -187,7 +224,7 @@ const calendarTypeKeyValue = calendarTypeOptions.reduce((acc, cur) => {
 }, {})
 
 export default {
-  components: { Pagination },
+  components: { DataFormDlg, Pagination },
   directives: { waves },
   filters: {
     statusFilter(status) {
@@ -200,21 +237,24 @@ export default {
     },
     typeFilter(type) {
       return calendarTypeKeyValue[type]
-    }
+    },
+    getDictLabel: getDictLabel
   },
   data() {
     return {
       tableKey: 0,
-      list: null,
-      total: 0,
+      list: [], // 表格数据
+      total: 0, // 表格数据总数
       listLoading: true,
-      listQuery: {
-        page: 1,
-        limit: 20,
-        importance: undefined,
+
+      listQuery: { // 搜索框初始化对象 可通过圆点语法添加
+        page: 1, // 当前页数
+        limit: 20, // 页面大小
+        /*        importance: undefined,
         title: undefined,
-        type: undefined,
-        sort: '+id'
+        type: undefined,*/
+        sort: undefined, // 'createTime', // 默认排序字段
+        order: 'desc' // 默认排序方式
       },
       importanceOptions: [1, 2, 3],
       calendarTypeOptions,
@@ -233,36 +273,48 @@ export default {
       dialogFormVisible: false,
       dialogStatus: '',
       textMap: {
-        update: 'Edit',
-        create: 'Create'
-      },
-      pvData: [],
+        update: '修改',
+        create: '创建'
+      }
+      /*      pvData: [],
       rules: {
         type: [{ required: true, message: 'type is required', trigger: 'change' }],
         timestamp: [{ type: 'date', required: true, message: 'timestamp is required', trigger: 'change' }],
         title: [{ required: true, message: 'title is required', trigger: 'blur' }]
       },
-      downloadLoading: false
+      downloadLoading: false*/
     }
   },
-  created() {
-    this.getList()
+  computed: {
+    dicts() {
+      return dicts
+    }
+  },
+  mounted() {
+    this.init()
   },
   methods: {
-    getList() {
+    init() {
+      this.getDataList()
+    },
+    getDataList() {
       this.listLoading = true
       fetchList(this.listQuery).then(response => {
+        this.listLoading = false
         this.list = response.data.items
         this.total = response.data.total
-        // Just to simulate the time of the request
-        setTimeout(() => {
-          this.listLoading = false
-        }, 1.5 * 1000)
       })
     },
     handleFilter() {
       this.listQuery.page = 1
-      this.getList()
+      this.getDataList()
+    },
+    handleReset(formName) {
+      this.$refs[formName].resetFields()
+      this.listQuery.page = 1
+      this.listQuery.limit = 20
+      // 重新加载数据
+      this.handleFilter()
     },
     handleModifyStatus(row, status) {
       this.$message({
@@ -271,6 +323,7 @@ export default {
       })
       row.status = status
     },
+    // 后端交互排序 start
     sortChange(data) {
       const { prop, order } = data
       if (prop === 'id') {
@@ -285,6 +338,8 @@ export default {
       }
       this.handleFilter()
     },
+    // 后端交互排序 end
+    // 清除表单 start
     resetTemp() {
       this.temp = {
         id: undefined,
@@ -295,20 +350,25 @@ export default {
         status: 'published',
         type: ''
       }
+      // 清除表单 end
     },
+    // 表单增删改 start
     handleCreate() {
-      this.resetTemp()
+      // this.resetTemp()
       this.dialogStatus = 'create'
       this.dialogFormVisible = true
-      this.$nextTick(() => {
+      /*      this.$nextTick(() => {
         this.$refs['dataForm'].clearValidate()
-      })
+      })*/
     },
     createData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
+          // 公用数据 start
           this.temp.id = parseInt(Math.random() * 100) + 1024 // mock a id
           this.temp.author = 'vue-element-admin'
+          // 公用数据 end
+          // 后端交互 start
           createArticle(this.temp).then(() => {
             this.list.unshift(this.temp)
             this.dialogFormVisible = false
@@ -319,6 +379,7 @@ export default {
               duration: 2000
             })
           })
+          // 后端交互 end
         }
       })
     },
@@ -327,9 +388,9 @@ export default {
       this.temp.timestamp = new Date(this.temp.timestamp)
       this.dialogStatus = 'update'
       this.dialogFormVisible = true
-      this.$nextTick(() => {
-        this.$refs['dataForm'].clearValidate()
-      })
+      /*      this.$nextTick(() => {
+              this.$refs['dataForm'].clearValidate()
+            })*/
     },
     updateData() {
       this.$refs['dataForm'].validate((valid) => {
@@ -361,6 +422,7 @@ export default {
       })
       this.list.splice(index, 1)
     },
+    // 表单增删改 end
     getSortClass: function(key) {
       const sort = this.listQuery.sort
       return sort === `+${key}` ? 'ascending' : 'descending'

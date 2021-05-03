@@ -80,5 +80,46 @@ module.exports = [
         data: 'success'
       }
     }
+  },
+
+  // user list
+  {
+    url: '/vue-admin-template/user/list',
+    type: 'get',
+    response: _ => {
+      return {
+        'code': 20000,
+        'msg': 'success',
+        'data': {
+          'total': 2,
+          'items': [
+            {
+              'id': 5,
+              'createTime': '2021-05-03 02:49:35',
+              'updateTime': '2021-05-03 02:49:35',
+              'username': 'admin',
+              'password': 'admin',
+              'sex': 0,
+              'email': 'admin@qq.com',
+              'mobile': '13286181871',
+              'status': 1,
+              'roleId': 1
+            },
+            {
+              'id': 6,
+              'createTime': '2021-05-03 02:49:39',
+              'updateTime': '2021-05-03 02:49:39',
+              'username': 'zhangsan',
+              'password': 'zhangsan',
+              'sex': 1,
+              'email': 'zhangsan@qq.com',
+              'mobile': '13286181879',
+              'status': 1,
+              'roleId': 1
+            }
+          ]
+        }
+      }
+    }
   }
 ]
