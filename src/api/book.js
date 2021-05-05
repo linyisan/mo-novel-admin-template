@@ -1,41 +1,49 @@
 import request from '@/utils/request'
 
-export function fetchList(query) {
+export function getAllBook(query) {
   return request({
-    url: 'http://localhost:8080/book/list',
+    url: 'http://localhost:8089/book/list',
     method: 'get',
     params: query
   })
 }
 
-export function fetchBook(id) {
+export function getBook(id) {
   return request({
-    url: '/article/detail',
+    url: `http://localhost:8089/book/get/${id}`,
     method: 'get',
     params: { id }
   })
 }
 
-export function fetchPv(pv) {
+export function searchBook(query) {
   return request({
-    url: '/vue-element-admin/article/pv',
+    url: 'http://localhost:8089/book/search',
     method: 'get',
-    params: { pv }
+    params: query
   })
 }
 
-export function createBook(data) {
+export function addBook(data) {
   return request({
-    url: '/vue-element-admin/book/create',
+    url: 'http://localhost:8089/book/add',
     method: 'post',
-    data
+    data: data
   })
 }
 
-export function updateBook(data) {
+export function editBook(data) {
   return request({
-    url: '/vue-element-admin/book/update',
+    url: 'http://localhost:8089/book/edit',
     method: 'post',
-    data
+    data: data
   })
 }
+
+export function deleteBook(id) {
+  return request({
+    url: `http://localhost:8089/book/delete/${id}`,
+    method: 'get'
+  })
+}
+

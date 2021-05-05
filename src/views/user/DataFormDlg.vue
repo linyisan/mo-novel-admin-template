@@ -1,9 +1,9 @@
 <template>
-  <el-dialog v-bind="$attrs" v-on="$listeners" @open="onOpen" @close="onClose">
+  <el-dialog ref="dataDlg" v-bind="$attrs" v-on="$listeners" @open="onOpen" @close="onClose">
     <el-row :gutter="15">
       <el-form
         ref="dataForm"
-        :model="tempFormData"
+        :model="dataform"
         :rules="rules"
         size="medium"
         label-width="80px"
@@ -12,7 +12,7 @@
         <el-col :span="24">
           <el-form-item label="用户名" prop="username">
             <el-input
-              v-model="tempFormData.username"
+              v-model="dataform.username"
               placeholder="请输入用户名"
               :maxlength="15"
               show-word-limit
@@ -24,7 +24,7 @@
         <el-col :span="24">
           <el-form-item label="密码" prop="password">
             <el-input
-              v-model="tempFormData.password"
+              v-model="dataform.password"
               placeholder="请输入密码"
               :maxlength="25"
               clearable
@@ -33,10 +33,10 @@
             />
           </el-form-item>
         </el-col>
-        <el-col :span="24">
-          <el-form-item label="确认密码" prop="checkPassword">
+        <el-col v-if="!dataform.id" :span="24">
+          <el-form-item label="确认密码" prop="checkPassword" required>
             <el-input
-              v-model="tempFormData.checkPassword"
+              v-model="dataform.checkPassword"
               placeholder="请输入确认密码"
               clearable
               show-password
@@ -46,13 +46,13 @@
         </el-col>
         <el-col :span="24">
           <el-form-item label="邮箱" prop="email">
-            <el-input v-model="tempFormData.email" placeholder="请输入邮箱" clearable :style="{width: '100%'}" />
+            <el-input v-model="dataform.email" placeholder="请输入邮箱" clearable :style="{width: '100%'}" />
           </el-form-item>
         </el-col>
         <el-col :span="24">
           <el-form-item label="手机号" prop="mobile">
             <el-input
-              v-model="tempFormData.mobile"
+              v-model="dataform.mobile"
               placeholder="请输入手机号"
               :maxlength="11"
               show-word-limit
@@ -63,7 +63,7 @@
         </el-col>
         <el-col :span="10">
           <el-form-item label="性别" prop="sex">
-            <el-select v-model="tempFormData.sex" placeholder="请选择性别" clearable :style="{width: '100%'}">
+            <el-select v-model="dataform.sex" placeholder="请选择性别" clearable :style="{width: '100%'}">
               <el-option
                 v-for="(item, index) in sexOptions"
                 :key="index"
@@ -76,7 +76,7 @@
         </el-col>
         <el-col :span="10">
           <el-form-item label="角色" prop="roleId">
-            <el-select v-model="tempFormData.roleId" placeholder="请选择角色" clearable :style="{width: '100%'}">
+            <el-select v-model="dataform.roleId" placeholder="请选择角色" clearable :style="{width: '100%'}">
               <el-option
                 v-for="(item, index) in roleIdOptions"
                 :key="index"
@@ -90,8 +90,8 @@
         <el-col :span="24">
           <el-form-item label="状态" prop="status" required>
             <el-switch
-              v-model="tempFormData.status"
-              active-text="可用"
+              v-model="dataform.status"
+              active-text="激活"
               inactive-text="禁用"
               :active-value="1"
               :inactive-value="0"
@@ -99,15 +99,17 @@
           </el-form-item>
         </el-col>
         <el-col :span="24">
-          <el-form-item label="头像" prop="avatar" required>
+          <el-form-item label="头像" prop="avatar">
             <el-upload
               ref="avatar"
               :file-list="avatarfileList"
+              :limit="1"
               :action="avatarAction"
               :before-upload="avatarBeforeUpload"
               list-type="picture-card"
               accept="image/*"
               name="avatar"
+              :auto-upload="false"
             >
               <i class="el-icon-plus" />
               <div slot="tip" class="el-upload__tip">只能上传不超过 2MB 的image/*文件</div>
@@ -127,14 +129,14 @@ export default {
   components: {},
   inheritAttrs: false,
   props: {
-    model: {
+    dataform: {
       required: true,
       type: Object
     }
   },
   data() {
     return {
-      tempFormData: {
+      /*      dataform: {
         username: undefined,
         password: undefined,
         checkPassword: undefined,
@@ -144,7 +146,7 @@ export default {
         roleId: '',
         status: 1,
         avatar: null
-      },
+      },*/
       rules: {
         username: [{
           required: true,
@@ -156,11 +158,7 @@ export default {
           message: '请输入密码',
           trigger: 'blur'
         }],
-        checkPassword: [{
-          required: true,
-          message: '请输入确认密码',
-          trigger: 'blur'
-        }],
+        checkPassword: [{ validator: this.validateCheckPass, trigger: 'blur' }],
         email: [{
           required: true,
           message: '请输入邮箱',
@@ -213,9 +211,12 @@ export default {
   created() {},
   mounted() {},
   methods: {
-    onOpen() {},
+    onOpen() {
+      console.log(JSON.stringify(this.dataform))
+    },
     onClose() {
       this.$refs['dataForm'].resetFields()
+      this.$refs['dataForm'].clearValidate()
     },
     close() {
       this.$emit('update:visible', false)
@@ -223,11 +224,17 @@ export default {
     handelConfirm() {
       this.$refs['dataForm'].validate(valid => {
         if (!valid) return
+        // v-model外传
+        // console.log('子组件', this.dataform.username)
+        delete this.dataform.checkPassword
+        delete this.dataform.updateTime
+        delete this.dataform.createTime
+        this.$emit('msubmit', this.dataform)
         this.close()
       })
     },
     avatarBeforeUpload(file) {
-      const isRightSize = file.size / 1024 / 1024 < 2
+      const isRightSize = true // file.size / 1024 / 1024 < 2
       if (!isRightSize) {
         this.$message.error('文件大小超过 2MB')
       }
@@ -236,6 +243,15 @@ export default {
         this.$message.error('应该选择image/*类型的文件')
       }
       return isRightSize && isAccept
+    },
+    validateCheckPass(rule, value, callback) {
+      if (value === '') {
+        callback(new Error('请再次输入密码'))
+      } else if (value !== this.dataform.password) {
+        callback(new Error('两次输入密码不一致'))
+      } else {
+        callback
+      }
     }
   }
 }

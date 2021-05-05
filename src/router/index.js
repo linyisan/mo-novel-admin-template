@@ -69,6 +69,19 @@ export const constantRoutes = [
   },
 
   {
+    path: '/bookIndex/:bookId',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        name: 'BookIndex',
+        component: () => import('@/views/bookindex/index'),
+        meta: { title: '小说章节管理', icon: 'form' }
+      }
+    ]
+  },
+
+  {
     path: '/user',
     component: Layout,
     children: [
@@ -77,6 +90,19 @@ export const constantRoutes = [
         name: 'User',
         component: () => import('@/views/user/index'),
         meta: { title: '用户管理', icon: 'form' }
+      }
+    ]
+  },
+
+  {
+    path: '/test',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        name: 'Test',
+        component: () => import('@/views/test'),
+        meta: { title: '测试页面', icon: 'form' }
       }
     ]
   },

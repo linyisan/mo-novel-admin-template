@@ -24,42 +24,40 @@ export function logout() {
   })
 }
 
-export function fetchList(query) {
+// get方法自动拼接query
+export function searchUser(query) {
   return request({
-    url: '/vue-admin-template/user/list',
+    url: 'http://localhost:8089/user/search',
     method: 'get',
     params: query
   })
 }
 
-export function fetchUser(id) {
+export function getUser(id) {
   return request({
-    url: 'http://localhost:8089/user/detail',
-    method: 'get',
-    params: { id }
+    url: `http://localhost:8089/user/get/${id}`,
+    method: 'get'
   })
 }
 
-export function fetchPv(pv) {
+export function addUser(data) {
   return request({
-    url: 'http://localhost:8089/user/pv',
-    method: 'get',
-    params: { pv }
-  })
-}
-
-export function createUser(data) {
-  return request({
-    url: 'http://localhost:8089/user/create',
+    url: 'http://localhost:8089/user/add',
     method: 'post',
-    data
+    data: data
   })
 }
 
-export function updateUser(data) {
+export function editUser(data) {
   return request({
-    url: 'http://localhost:8089/user/update',
+    url: 'http://localhost:8089/user/edit',
     method: 'post',
-    data
+    data: data
+  })
+}
+export function deleteUser(id) {
+  return request({
+    url: `http://localhost:8089/user/delete/${id}`,
+    method: 'get'
   })
 }
