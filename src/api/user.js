@@ -1,17 +1,16 @@
 import request from '@/utils/request'
 
-// TODO:修改URL
 export function login(data) {
   return request({
-    url: '/vue-admin-template/user/login',
+    url: '/auth/login',
     method: 'post',
-    data
+    data: data
   })
 }
 
 export function getInfo(token) {
   return request({
-    url: '/vue-admin-template/user/info',
+    url: '/auth/info',
     method: 'get',
     params: { token }
   })
@@ -19,7 +18,7 @@ export function getInfo(token) {
 
 export function logout() {
   return request({
-    url: '/vue-admin-template/logout',
+    url: '/auth/logout',
     method: 'post'
   })
 }
@@ -27,7 +26,7 @@ export function logout() {
 // get方法自动拼接query
 export function searchUser(query) {
   return request({
-    url: 'http://localhost:8089/user/search',
+    url: '/user/search',
     method: 'get',
     params: query
   })
@@ -35,14 +34,14 @@ export function searchUser(query) {
 
 export function getUser(id) {
   return request({
-    url: `http://localhost:8089/user/get/${id}`,
+    url: `/user/get/${id}`,
     method: 'get'
   })
 }
 
 export function addUser(data) {
   return request({
-    url: 'http://localhost:8089/user/add',
+    url: '/user/add',
     method: 'post',
     data: data
   })
@@ -50,14 +49,15 @@ export function addUser(data) {
 
 export function editUser(data) {
   return request({
-    url: 'http://localhost:8089/user/edit',
+    url: '/user/edit',
     method: 'post',
     data: data
   })
 }
+
 export function deleteUser(id) {
   return request({
-    url: `http://localhost:8089/user/delete/${id}`,
+    url: `/user/delete/${id}`,
     method: 'get'
   })
 }

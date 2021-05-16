@@ -2,14 +2,14 @@ import request from '@/utils/request'
 
 export function getBookIndex(id) {
   return request({
-    url: `http://localhost:8089/bookindex/get/${id}`,
+    url: `/bookindex/get/${id}`,
     method: 'get'
   })
 }
 
 export function searchBookIndex(query) {
   return request({
-    url: 'http://localhost:8089/bookindex/search',
+    url: '/bookindex/search',
     method: 'get',
     params: query
   })
@@ -17,7 +17,7 @@ export function searchBookIndex(query) {
 
 export function addBookIndex(data) {
   return request({
-    url: 'http://localhost:8089/bookindex/add',
+    url: '/bookindex/add',
     method: 'post',
     data: data
   })
@@ -25,7 +25,7 @@ export function addBookIndex(data) {
 
 export function editBookIndex(data) {
   return request({
-    url: 'http://localhost:8089/bookindex/edit',
+    url: '/bookindex/edit',
     method: 'post',
     data: data
   })
@@ -33,7 +33,7 @@ export function editBookIndex(data) {
 
 export function deleteBookIndex(id) {
   return request({
-    url: `http://localhost:8089/bookindex/delete/${id}`,
+    url: `/bookindex/delete/${id}`,
     method: 'get'
   })
 }

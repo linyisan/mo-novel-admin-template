@@ -46,10 +46,11 @@ export const constantRoutes = [
   {
     path: '/',
     component: Layout,
-    redirect: '/dashboard',
+    redirect: '/stat/index',
     children: [{
       path: 'dashboard',
       name: 'Dashboard',
+      hidden: true,
       component: () => import('@/views/dashboard/index'),
       meta: { title: 'Dashboard', icon: 'dashboard' }
     }]
@@ -63,7 +64,7 @@ export const constantRoutes = [
         path: 'index',
         name: 'Book',
         component: () => import('@/views/book/index'),
-        meta: { title: '小说管理', icon: 'form' }
+        meta: { title: '小说管理', icon: 'el-icon-s-management' }
       }
     ]
   },
@@ -71,12 +72,49 @@ export const constantRoutes = [
   {
     path: '/bookIndex/:bookId',
     component: Layout,
+    hidden: true,
     children: [
       {
         path: 'index',
         name: 'BookIndex',
         component: () => import('@/views/bookindex/index'),
         meta: { title: '小说章节管理', icon: 'form' }
+      }
+    ]
+  },
+  {
+    path: '/comment',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        name: 'Comment',
+        component: () => import('@/views/comment/index'),
+        meta: { title: '评论管理', icon: 'el-icon-s-comment' }
+      }
+    ]
+  },
+  {
+    path: '/feedback',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        name: 'Feedback',
+        component: () => import('@/views/feedback/index'),
+        meta: { title: '用户反馈', icon: 'el-icon-message' }
+      }
+    ]
+  },
+  {
+    path: '/notice',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        name: 'Notice',
+        component: () => import('@/views/notice/index'),
+        meta: { title: '站内消息', icon: 'el-icon-chat-dot-round' }
       }
     ]
   },
@@ -89,7 +127,7 @@ export const constantRoutes = [
         path: 'index',
         name: 'User',
         component: () => import('@/views/user/index'),
-        meta: { title: '用户管理', icon: 'form' }
+        meta: { title: '用户管理', icon: 'el-icon-user' }
       }
     ]
   },
@@ -97,6 +135,7 @@ export const constantRoutes = [
   {
     path: '/test',
     component: Layout,
+    hidden: true,
     children: [
       {
         path: 'index',
@@ -108,9 +147,34 @@ export const constantRoutes = [
   },
 
   {
+    path: '/stat',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/stat'),
+        meta: { title: '数据统计', icon: 'el-icon-pie-chart' }
+      }
+    ]
+  },
+
+  {
+    path: '/booksetting',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/booksetting'),
+        meta: { title: '首页推荐', icon: 'el-icon-s-help' }
+      }
+    ]
+  },
+
+  {
     path: '/example',
     component: Layout,
     redirect: '/example/table',
+    hidden: true,
     name: 'Example',
     meta: { title: 'Example', icon: 'el-icon-s-help' },
     children: [
@@ -132,6 +196,7 @@ export const constantRoutes = [
   {
     path: '/form',
     component: Layout,
+    hidden: true,
     children: [
       {
         path: 'index',
@@ -145,6 +210,7 @@ export const constantRoutes = [
   {
     path: '/nested',
     component: Layout,
+    hidden: true,
     redirect: '/nested/menu1',
     name: 'Nested',
     meta: {
@@ -204,6 +270,7 @@ export const constantRoutes = [
   {
     path: 'external-link',
     component: Layout,
+    hidden: true,
     children: [
       {
         path: 'https://panjiachen.github.io/vue-element-admin-site/#/',

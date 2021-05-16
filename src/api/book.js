@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 export function getAllBook(query) {
   return request({
-    url: 'http://localhost:8089/book/list',
+    url: '/book/list',
     method: 'get',
     params: query
   })
@@ -10,7 +10,7 @@ export function getAllBook(query) {
 
 export function getBook(id) {
   return request({
-    url: `http://localhost:8089/book/get/${id}`,
+    url: `/book/get/${id}`,
     method: 'get',
     params: { id }
   })
@@ -18,7 +18,7 @@ export function getBook(id) {
 
 export function searchBook(query) {
   return request({
-    url: 'http://localhost:8089/book/search',
+    url: '/book/search',
     method: 'get',
     params: query
   })
@@ -26,7 +26,7 @@ export function searchBook(query) {
 
 export function addBook(data) {
   return request({
-    url: 'http://localhost:8089/book/add',
+    url: '/book/add',
     method: 'post',
     data: data
   })
@@ -34,7 +34,7 @@ export function addBook(data) {
 
 export function editBook(data) {
   return request({
-    url: 'http://localhost:8089/book/edit',
+    url: '/book/edit',
     method: 'post',
     data: data
   })
@@ -42,7 +42,7 @@ export function editBook(data) {
 
 export function deleteBook(id) {
   return request({
-    url: `http://localhost:8089/book/delete/${id}`,
+    url: `/book/delete/${id}`,
     method: 'get'
   })
 }

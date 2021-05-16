@@ -6,29 +6,20 @@
         :model="tempFormData"
         :rules="rules"
         size="medium"
-        label-width="80px"
+        label-width="85px"
         label-position="top"
       >
-        <el-form-item label="章节名" prop="title">
-          <el-input
-            v-model="tempFormData.title"
-            placeholder="请输入章节名"
-            :maxlength="30"
-            show-word-limit
-            clearable
-            :style="{width: '100%'}"
-          />
+        <el-form-item label="标题" prop="title">
+          <el-input v-model="tempFormData.title" placeholder="请输入标题" clearable :style="{width: '100%'}" />
         </el-form-item>
-        <el-form-item label="状态" prop="status" required>
-          <el-switch v-model="tempFormData.status" active-text="发布" inactive-text="草稿" :active-value="1" :inactive-value="0" />
-        </el-form-item>
-        <el-form-item label="章节内容" prop="content">
+        <el-form-item label="内容" prop="content">
           <el-input
             v-model="tempFormData.content"
             type="textarea"
-            placeholder="请输入章节内容"
+            placeholder="请输入消息内容"
+            :maxlength="1000"
             show-word-limit
-            :autosize="{minRows: 4, maxRows: 30}"
+            :autosize="{minRows: 20, maxRows: 50}"
             :style="{width: '100%'}"
           />
         </el-form-item>
@@ -46,7 +37,7 @@ export default {
   inheritAttrs: false,
   props: {
     tempFormData: {
-      required: true,
+      require: true,
       type: Object
     }
   },
@@ -55,12 +46,12 @@ export default {
       rules: {
         title: [{
           required: true,
-          message: '请输入章节名',
+          message: '请输入标题',
           trigger: 'blur'
         }],
         content: [{
           required: true,
-          message: '请输入章节内容',
+          message: '请输入消息内容',
           trigger: 'blur'
         }]
       }
