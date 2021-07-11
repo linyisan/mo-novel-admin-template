@@ -140,7 +140,7 @@ export const constantRoutes = [
       {
         path: 'index',
         name: 'Test',
-        component: () => import('@/views/test'),
+        component: () => import('@/views/test/test'),
         meta: { title: '测试页面', icon: 'form' }
       }
     ]

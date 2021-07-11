@@ -95,11 +95,11 @@
           <span>{{ row.email }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="头像" align="center">
+<!--      <el-table-column label="头像" align="center">
         <template slot-scope="{row}">
           <span>{{ row.avatar }}</span>
         </template>
-      </el-table-column>
+      </el-table-column>-->
       <el-table-column label="手机" align="center">
         <template slot-scope="{row}">
           <span>{{ row.mobile }}</span>

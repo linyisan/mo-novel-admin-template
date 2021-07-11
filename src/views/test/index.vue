@@ -14,6 +14,8 @@
 </template>
 
 <script>
+import { fanSta } from '@/api/stat'
+
 export default {
   data() {
     return {
